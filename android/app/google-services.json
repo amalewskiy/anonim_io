@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "416498051212",
+    "firebase_url": "https://anonim-io-server-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "anonim-io-server",
+    "storage_bucket": "anonim-io-server.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:416498051212:android:4fe4e0a63d8950bc8c33a9",
+        "android_client_info": {
+          "package_name": "com.example.anonim_io"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "416498051212-o1uhu090uo295brcq9l26d715qesrfls.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCzPpgr1rtCZYeVYeN_5fEW-nPixEzIzWs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "416498051212-o1uhu090uo295brcq9l26d715qesrfls.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
