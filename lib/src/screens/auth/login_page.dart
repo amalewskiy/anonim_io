@@ -27,7 +27,7 @@ class LoginPage extends StatelessWidget {
             return Column(
               children: [
                 SizedBox(height: MediaQuery.of(context).size.height * 0.15),
-                Image.asset('assets/logo.png'),
+                const Image(image: AssetImage('assets/logo.png')),
                 TextField(
                   keyboardType: TextInputType.emailAddress,
                   decoration: const InputDecoration(hintText: 'Email'),
