@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:anonim_io/src/core/services/database_service.dart';
 import 'package:anonim_io/src/models/user/user.dart';
 

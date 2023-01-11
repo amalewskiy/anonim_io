@@ -13,12 +13,9 @@ part 'conversation_cubit.freezed.dart';
 class ConversationCubit extends Cubit<ConversationState> {
   ConversationCubit({required ChatRepository chatRepository})
       : _chatRepository = chatRepository,
-        super(const ConversationState.initial()) {
-    //  _conversationStreamSubscription = _chatRepository.getStreamConversation(loggedInUserId, recipientUserId).listen((event) => ))
-  }
+        super(const ConversationState.initial());
 
   final ChatRepository _chatRepository;
-  late final StreamSubscription<List<Message>> _conversationStreamSubscription;
 
   void changeMessage(String text) => emit(state.copyWith(message: text));
 
@@ -33,6 +30,3 @@ class ConversationCubit extends Cubit<ConversationState> {
     );
   }
 }
-
-//  _userStreamSubscription =
-//         _authRepository.user.listen((user) => add(_UserChanged(user: user)));
