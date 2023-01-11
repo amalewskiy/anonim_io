@@ -21,8 +21,10 @@ class AppRouter {
   NoTransitionPage<NoTransitionPage<HomePage>> _homePage(_, __) =>
       const NoTransitionPage(child: HomePage());
   Widget _loadingPage(_, __) => const LoadingPage();
-  Widget _chatPage(_, GoRouterState state) =>
-      ConversationPage(userId: state.params['id']!);
+  Widget _chatPage(_, GoRouterState state) => ConversationPage(
+        recipientUserId: state.params['id']!,
+        recipientUserEmail: state.queryParams['email']!,
+      );
 
   late final GoRouter router = GoRouter(
     initialLocation: Pages.home,

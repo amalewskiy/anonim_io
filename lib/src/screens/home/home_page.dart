@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:anonim_io/injector.dart';
 import 'package:anonim_io/src/auth_bloc/auth_bloc.dart';
 import 'package:anonim_io/src/core/utils/failure.dart';
@@ -21,14 +23,18 @@ class HomePage extends StatelessWidget {
     return BlocProvider<HomeCubit>(
       create: (_) => sl<HomeCubit>(),
       child: ContentPage(
+        withScrollPhysics: false,
         child: BlocBuilder<HomeCubit, HomeState>(
           builder: (context, state) {
             return Column(
               children: [
                 TextField(
-                  onChanged: (value) {
-                    context.read<HomeCubit>().findUser(value);
-                  },
+                  decoration: const InputDecoration(
+                    hintText: 'Search user',
+                    suffixIcon: Icon(Icons.search),
+                  ),
+                  onChanged: (value) =>
+                      context.read<HomeCubit>().findUser(value),
                 ),
                 state.when(
                   initial: () => const _WhenInitialState(),
@@ -62,11 +68,17 @@ class _WhenInitialState extends StatelessWidget {
           case ConnectionState.waiting:
             return const LoadingWidget();
           case ConnectionState.active:
-            if (snapshot.hasData) {
+            if (snapshot.hasData && snapshot.data!.isNotEmpty) {
+              log('message');
               return _RecentMessages(conversations: snapshot.data!);
             } else {
-              return const Expanded(
-                child: Center(child: Text('Start conversation')),
+              return Expanded(
+                child: Center(
+                  child: Text(
+                    'Start conversation...',
+                    style: Theme.of(context).textTheme.headline3,
+                  ),
+                ),
               );
             }
           // ignore: no_default_cases
@@ -86,14 +98,24 @@ class _RecentMessages extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Flexible(
+    return Expanded(
       child: ListView.separated(
         shrinkWrap: true,
         itemCount: conversations.length,
         padding: const EdgeInsets.all(8),
-        itemBuilder: (context, index) => ListTile(
-          title: Text(conversations[index].senderId),
-          subtitle: Text(conversations[index].message),
+        itemBuilder: (context, index) => GestureDetector(
+          onTap: () => context.pushNamed(
+            Pages.conversationRouteName,
+            params: {'id': conversations[index].recipientUserId},
+            queryParams: {'email': conversations[index].recipientUserEmail},
+          ),
+          child: ListTile(
+            title: Text(
+              conversations[index].recipientUserEmail,
+              style: Theme.of(context).textTheme.headline3,
+            ),
+            subtitle: Text(conversations[index].message),
+          ),
         ),
         separatorBuilder: (_, __) => const SizedBox(height: 8),
       ),
@@ -113,11 +135,24 @@ class _WhenFindUserMode extends StatelessWidget {
         onTap: () => context.pushNamed(
           Pages.conversationRouteName,
           params: {'id': foundUser!.id},
+          queryParams: {'email': foundUser!.email},
         ),
-        child: ListTile(title: Text(foundUser!.email)),
+        child: ListTile(
+          title: Text(
+            foundUser!.email,
+            style: Theme.of(context).textTheme.headline3,
+          ),
+        ),
       );
     } else {
-      return const SizedBox.shrink();
+      return Expanded(
+        child: Center(
+          child: Text(
+            'User not found :(',
+            style: Theme.of(context).textTheme.headline3,
+          ),
+        ),
+      );
     }
   }
 }

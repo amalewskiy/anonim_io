@@ -7,6 +7,8 @@ part 'message.g.dart';
 abstract class Message with _$Message {
   const factory Message({
     required String senderId,
+    required String recipientUserId,
+    required String recipientUserEmail,
     required String message,
     required DateTime timestamp,
   }) = _Message;
