@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:anonim_io/injector.dart';
 import 'package:anonim_io/src/auth_bloc/auth_bloc.dart';
 import 'package:anonim_io/src/core/utils/failure.dart';
