@@ -26,18 +26,25 @@ class LoginPage extends StatelessWidget {
           builder: (context, state) {
             return Column(
               children: [
-                SizedBox(height: MediaQuery.of(context).size.height * 0.6),
+                SizedBox(height: MediaQuery.of(context).size.height * 0.15),
+                Image.asset('assets/logo.png'),
                 TextField(
+                  keyboardType: TextInputType.emailAddress,
+                  decoration: const InputDecoration(hintText: 'Email'),
                   onChanged: (value) =>
                       context.read<LoginCubit>().changeEmail(value),
                 ),
+                const SizedBox(height: mediumHorizontalSpacing),
                 TextField(
+                  obscureText: true,
+                  decoration: const InputDecoration(hintText: 'Password'),
                   onChanged: (value) =>
                       context.read<LoginCubit>().changePassword(value),
                 ),
-                TextButton(
+                const SizedBox(height: mediumHorizontalSpacing),
+                ElevatedButton(
                   onPressed: () => context.read<LoginCubit>().login(),
-                  child: const Text('Login', style: TextStyle(fontSize: 30)),
+                  child: const Text('Login or sign up'),
                 )
               ],
             );

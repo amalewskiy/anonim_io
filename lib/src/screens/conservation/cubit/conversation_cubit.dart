@@ -19,11 +19,17 @@ class ConversationCubit extends Cubit<ConversationState> {
 
   void changeMessage(String text) => emit(state.copyWith(message: text));
 
-  Future<void> sendMesage(String senderId, String recipientId) async {
+  Future<void> sendMesage(
+    String senderId,
+    String recipientId,
+    String recipientEmail,
+  ) async {
     await _chatRepository.sendMessage(
       recipientId,
       Message(
         senderId: senderId,
+        recipientUserId: recipientId,
+        recipientUserEmail: recipientEmail,
         message: state.message.trim(),
         timestamp: DateTime.now(),
       ),

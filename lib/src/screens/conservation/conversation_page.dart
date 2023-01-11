@@ -1,6 +1,8 @@
 import 'package:anonim_io/injector.dart';
 import 'package:anonim_io/src/auth_bloc/auth_bloc.dart';
+import 'package:anonim_io/src/core/utils/const.dart';
 import 'package:anonim_io/src/core/utils/failure.dart';
+import 'package:anonim_io/src/core/utils/palette.dart';
 import 'package:anonim_io/src/models/message/message.dart';
 import 'package:anonim_io/src/repositories/chat_repository.dart';
 import 'package:anonim_io/src/screens/conservation/cubit/conversation_cubit.dart';
@@ -10,21 +12,32 @@ import 'package:anonim_io/src/widgets/loading_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
 
 class ConversationPage extends StatelessWidget {
-  const ConversationPage({required this.userId, super.key});
+  const ConversationPage({
+    required this.recipientUserId,
+    required this.recipientUserEmail,
+    super.key,
+  });
 
-  final String userId;
+  final String recipientUserId;
+  final String recipientUserEmail;
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider<ConversationCubit>(
       create: (_) => sl<ConversationCubit>(),
       child: Scaffold(
-        appBar: AppBar(
-          leading: BackButton(onPressed: () => context.pop()),
+        appBar: PreferredSize(
+          preferredSize: const Size.fromHeight(40),
+          child: AppBar(
+            leading: BackButton(onPressed: () => context.pop()),
+            title: Text(recipientUserEmail),
+          ),
         ),
         body: ContentPage(
+          withScrollPhysics: false,
           child: Column(
             children: [
               StreamBuilder(
@@ -33,21 +46,21 @@ class ConversationPage extends StatelessWidget {
                         authenticated: (user) => user.id,
                         orElse: () => '',
                       ),
-                  userId,
+                  recipientUserId,
                 ),
                 builder: (context, snapshot) {
                   switch (snapshot.connectionState) {
                     case ConnectionState.waiting:
                       return const LoadingWidget();
                     case ConnectionState.active:
-                      if (snapshot.hasData) {
+                      if (snapshot.hasData && snapshot.data!.isNotEmpty) {
                         return _Messages(
-                          participantUserId: userId,
+                          participantUserId: recipientUserId,
                           conversation: snapshot.data!,
                         );
                       } else {
                         return const Expanded(
-                          child: Center(child: Text('Start conversation')),
+                          child: Center(child: Text('No message here yet')),
                         );
                       }
                     // ignore: no_default_cases
@@ -57,7 +70,10 @@ class ConversationPage extends StatelessWidget {
                   }
                 },
               ),
-              _InputField(participantUserId: userId),
+              _InputField(
+                participantUserId: recipientUserId,
+                participantUserEmail: recipientUserEmail,
+              ),
             ],
           ),
         ),
@@ -82,12 +98,11 @@ class _Messages extends StatelessWidget {
         shrinkWrap: true,
         reverse: true,
         itemCount: conversation.length,
-        padding: const EdgeInsets.all(8),
         itemBuilder: (context, index) => _Message(
           message: conversation[index],
           isSender: conversation[index].senderId != participantUserId,
         ),
-        separatorBuilder: (_, __) => const SizedBox(height: 8),
+        separatorBuilder: (_, __) => const SizedBox(height: 4),
       ),
     );
   }
@@ -104,7 +119,6 @@ class _Message extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final screenSize = MediaQuery.of(context).size;
     return Align(
       alignment: isSender ? Alignment.centerRight : Alignment.centerLeft,
       child: Column(
@@ -112,32 +126,35 @@ class _Message extends StatelessWidget {
             isSender ? CrossAxisAlignment.end : CrossAxisAlignment.start,
         children: <Widget>[
           Container(
-            width: screenSize.width * 0.6,
-            padding: const EdgeInsets.all(8),
+            padding: const EdgeInsets.all(appPadding),
             decoration: BoxDecoration(
-              color: isSender ? Colors.orange : Colors.white.withOpacity(0.6),
-              borderRadius: const BorderRadius.all(
-                Radius.circular(8),
+              color: isSender ? Palette.mainBlue : Palette.recipientUserMessage,
+              borderRadius: BorderRadius.only(
+                topLeft: const Radius.circular(messageRadius),
+                topRight: const Radius.circular(messageRadius),
+                bottomLeft: isSender
+                    ? const Radius.circular(messageRadius)
+                    : const Radius.circular(4),
+                bottomRight: isSender
+                    ? const Radius.circular(4)
+                    : const Radius.circular(messageRadius),
               ),
-              border: !isSender ? Border.all(color: Colors.cyan) : null,
             ),
             child: Text(
               message.message,
               style: Theme.of(context)
                   .textTheme
-                  .headlineMedium!
-                  .copyWith(color: isSender ? Colors.white : null),
+                  .headline1!
+                  .copyWith(color: isSender ? Colors.white : Colors.black),
             ),
           ),
-          const SizedBox(height: 12),
-          // Text(
-          //   DateFormat('dd.MM.yyyy HH:mm', Platform.localeName)
-          //       .format(message.timestamp),
-          //   style: Theme.of(context)
-          //       .textTheme
-          //       .bodySmall!
-          //       .copyWith(color: Colors.cyan),
-          // )
+          const SizedBox(height: 4),
+          Text(
+            DateFormat('dd.MM hh:mm').format(message.timestamp),
+            style:
+                Theme.of(context).textTheme.headline1!.copyWith(fontSize: 11),
+          ),
+          const SizedBox(height: appPadding),
         ],
       ),
     );
@@ -145,9 +162,13 @@ class _Message extends StatelessWidget {
 }
 
 class _InputField extends StatelessWidget {
-  _InputField({required this.participantUserId});
+  _InputField({
+    required this.participantUserId,
+    required this.participantUserEmail,
+  });
 
   final String participantUserId;
+  final String participantUserEmail;
 
   final TextEditingController controller = TextEditingController();
 
@@ -159,24 +180,20 @@ class _InputField extends StatelessWidget {
       textAlignVertical: TextAlignVertical.center,
       onChanged: (text) =>
           context.read<ConversationCubit>().changeMessage(text),
-      // context.read<ConversationCubit>().changeMessageText(value),
       decoration: InputDecoration(
-        border: const OutlineInputBorder(
-          borderSide: BorderSide.none,
-          borderRadius: BorderRadius.all(Radius.circular(8)),
-        ),
         hintText: 'Message',
         suffixIcon: IconButton(
           icon: const Icon(Icons.send_outlined),
           onPressed: () async {
+            controller.clear();
             await context.read<ConversationCubit>().sendMesage(
                   context.read<AuthBloc>().state.maybeWhen(
                         authenticated: (user) => user.id,
                         orElse: () => '',
                       ),
                   participantUserId,
+                  participantUserEmail,
                 );
-            controller.clear();
           },
         ),
       ),

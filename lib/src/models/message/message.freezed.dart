@@ -21,6 +21,8 @@ Message _$MessageFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$Message {
   String get senderId => throw _privateConstructorUsedError;
+  String get recipientUserId => throw _privateConstructorUsedError;
+  String get recipientUserEmail => throw _privateConstructorUsedError;
   String get message => throw _privateConstructorUsedError;
   DateTime get timestamp => throw _privateConstructorUsedError;
 
@@ -34,7 +36,12 @@ abstract class $MessageCopyWith<$Res> {
   factory $MessageCopyWith(Message value, $Res Function(Message) then) =
       _$MessageCopyWithImpl<$Res, Message>;
   @useResult
-  $Res call({String senderId, String message, DateTime timestamp});
+  $Res call(
+      {String senderId,
+      String recipientUserId,
+      String recipientUserEmail,
+      String message,
+      DateTime timestamp});
 }
 
 /// @nodoc
@@ -51,6 +58,8 @@ class _$MessageCopyWithImpl<$Res, $Val extends Message>
   @override
   $Res call({
     Object? senderId = null,
+    Object? recipientUserId = null,
+    Object? recipientUserEmail = null,
     Object? message = null,
     Object? timestamp = null,
   }) {
@@ -58,6 +67,14 @@ class _$MessageCopyWithImpl<$Res, $Val extends Message>
       senderId: null == senderId
           ? _value.senderId
           : senderId // ignore: cast_nullable_to_non_nullable
+              as String,
+      recipientUserId: null == recipientUserId
+          ? _value.recipientUserId
+          : recipientUserId // ignore: cast_nullable_to_non_nullable
+              as String,
+      recipientUserEmail: null == recipientUserEmail
+          ? _value.recipientUserEmail
+          : recipientUserEmail // ignore: cast_nullable_to_non_nullable
               as String,
       message: null == message
           ? _value.message
@@ -78,7 +95,12 @@ abstract class _$$_MessageCopyWith<$Res> implements $MessageCopyWith<$Res> {
       __$$_MessageCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String senderId, String message, DateTime timestamp});
+  $Res call(
+      {String senderId,
+      String recipientUserId,
+      String recipientUserEmail,
+      String message,
+      DateTime timestamp});
 }
 
 /// @nodoc
@@ -92,6 +114,8 @@ class __$$_MessageCopyWithImpl<$Res>
   @override
   $Res call({
     Object? senderId = null,
+    Object? recipientUserId = null,
+    Object? recipientUserEmail = null,
     Object? message = null,
     Object? timestamp = null,
   }) {
@@ -99,6 +123,14 @@ class __$$_MessageCopyWithImpl<$Res>
       senderId: null == senderId
           ? _value.senderId
           : senderId // ignore: cast_nullable_to_non_nullable
+              as String,
+      recipientUserId: null == recipientUserId
+          ? _value.recipientUserId
+          : recipientUserId // ignore: cast_nullable_to_non_nullable
+              as String,
+      recipientUserEmail: null == recipientUserEmail
+          ? _value.recipientUserEmail
+          : recipientUserEmail // ignore: cast_nullable_to_non_nullable
               as String,
       message: null == message
           ? _value.message
@@ -116,7 +148,11 @@ class __$$_MessageCopyWithImpl<$Res>
 @JsonSerializable()
 class _$_Message implements _Message {
   const _$_Message(
-      {required this.senderId, required this.message, required this.timestamp});
+      {required this.senderId,
+      required this.recipientUserId,
+      required this.recipientUserEmail,
+      required this.message,
+      required this.timestamp});
 
   factory _$_Message.fromJson(Map<String, dynamic> json) =>
       _$$_MessageFromJson(json);
@@ -124,13 +160,17 @@ class _$_Message implements _Message {
   @override
   final String senderId;
   @override
+  final String recipientUserId;
+  @override
+  final String recipientUserEmail;
+  @override
   final String message;
   @override
   final DateTime timestamp;
 
   @override
   String toString() {
-    return 'Message(senderId: $senderId, message: $message, timestamp: $timestamp)';
+    return 'Message(senderId: $senderId, recipientUserId: $recipientUserId, recipientUserEmail: $recipientUserEmail, message: $message, timestamp: $timestamp)';
   }
 
   @override
@@ -140,6 +180,10 @@ class _$_Message implements _Message {
             other is _$_Message &&
             (identical(other.senderId, senderId) ||
                 other.senderId == senderId) &&
+            (identical(other.recipientUserId, recipientUserId) ||
+                other.recipientUserId == recipientUserId) &&
+            (identical(other.recipientUserEmail, recipientUserEmail) ||
+                other.recipientUserEmail == recipientUserEmail) &&
             (identical(other.message, message) || other.message == message) &&
             (identical(other.timestamp, timestamp) ||
                 other.timestamp == timestamp));
@@ -147,7 +191,8 @@ class _$_Message implements _Message {
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, senderId, message, timestamp);
+  int get hashCode => Object.hash(runtimeType, senderId, recipientUserId,
+      recipientUserEmail, message, timestamp);
 
   @JsonKey(ignore: true)
   @override
@@ -166,6 +211,8 @@ class _$_Message implements _Message {
 abstract class _Message implements Message {
   const factory _Message(
       {required final String senderId,
+      required final String recipientUserId,
+      required final String recipientUserEmail,
       required final String message,
       required final DateTime timestamp}) = _$_Message;
 
@@ -173,6 +220,10 @@ abstract class _Message implements Message {
 
   @override
   String get senderId;
+  @override
+  String get recipientUserId;
+  @override
+  String get recipientUserEmail;
   @override
   String get message;
   @override

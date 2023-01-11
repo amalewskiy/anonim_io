@@ -1,16 +1,20 @@
-# anonim_io
+# anonim.io
 
-A new Flutter project.
+Aplikacja która będzie pozwalać czatowanie z innymi użytkownikami w sposób anonimowy. Pierwszy ekran na górze będzie miał pole wyszukiwania użytkowników przez ID lub login, a niżej bedą znajdować się lub znalezione użytkownicy, lub do których było ostatnio napisana wiadomość. Na drugim ekranie bezpośrednio konwersacja z tym użytkownikiem.
 
-## Getting Started
+#### Wzorce kreacyjne
 
-This project is a starting point for a Flutter application.
+1. Metoda wytwórcza
+2. Singletone
 
-A few resources to get you started if this is your first Flutter project:
+#### Wzorce strukturalne
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+1. Kompozyt
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+#### Wzorce behawioralne
+
+1. Iterator
+2. Obserwator
+3. Stan
+4. Odwiedzający
+5. Pamiątka
