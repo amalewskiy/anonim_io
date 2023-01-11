@@ -1,6 +1,7 @@
 import 'package:anonim_io/src/auth_bloc/auth_bloc.dart';
 import 'package:anonim_io/src/core/utils/pages.dart';
 import 'package:anonim_io/src/screens/auth/login_page.dart';
+import 'package:anonim_io/src/screens/conservation/conversation_page.dart';
 import 'package:anonim_io/src/screens/home/home_page.dart';
 import 'package:anonim_io/src/screens/loading_page.dart';
 import 'package:flutter/material.dart';
@@ -20,13 +21,25 @@ class AppRouter {
   NoTransitionPage<NoTransitionPage<HomePage>> _homePage(_, __) =>
       const NoTransitionPage(child: HomePage());
   Widget _loadingPage(_, __) => const LoadingPage();
+  Widget _chatPage(_, GoRouterState state) =>
+      ConversationPage(userId: state.params['id']!);
 
   late final GoRouter router = GoRouter(
     initialLocation: Pages.home,
     navigatorKey: _rootNavigatorKey,
     routes: [
       GoRoute(path: Pages.login, builder: _loginPage),
-      GoRoute(path: Pages.home, pageBuilder: _homePage),
+      GoRoute(
+        path: Pages.home,
+        pageBuilder: _homePage,
+        routes: <GoRoute>[
+          GoRoute(
+            path: Pages.conversationRouteName,
+            name: Pages.conversationRouteName,
+            builder: _chatPage,
+          ),
+        ],
+      ),
       GoRoute(path: Pages.loadingPage, builder: _loadingPage),
     ],
     refreshListenable: GoRouterRefreshStream(_authBloc.stream),

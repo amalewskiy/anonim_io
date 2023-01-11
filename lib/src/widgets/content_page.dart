@@ -8,9 +8,11 @@ class ContentPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.all(8),
-        child: child,
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.all(8),
+          child: child,
+        ),
       ),
     );
   }
